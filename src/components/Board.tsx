@@ -2,16 +2,12 @@ import { Theme, type Board } from "@/types"
 import { Separator } from "./ui/separator";
 import List from "./List";
 import { Ellipsis, Plus } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from "./ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBoardsStore } from "@/utils/boards";
-import DialogBoardTheme from "./DialogBoardTheme";
-import DialogBoardTitle from "./DialogBoardTitle";
 import { themes } from "@/consts";
-import DialogBoardDelete from "./DialogBoardDelete";
 import DialogAddList from '@/components/DialogAddList'
+import DropdownMenuOptions from "./DropdownMenuOptions";
 
 export type ThemeOptionType = {
   id: Theme;
@@ -19,11 +15,8 @@ export type ThemeOptionType = {
 }
 
 const Board = () => {
-  const { boards, setBoard: setNewBoard, removeBoard } = useBoardsStore()
+  const { boards, updateBoard, removeBoard } = useBoardsStore()
   const { boardId } = useParams()
-  const [titleMenuOpen, setTitleMenuOpen] = useState(false)
-  const [themeMenuOpen, setThemeMenuOpen] = useState(false)
-  const [removeMenuOpen, setRemoveMenuOpen] = useState(false)
   const [board, setBoard] = useState<Board>(boards.find(board => board.id === boardId)!)
   const [title, setTitle] = useState<string>(board.title)
   const [theme, setTheme] = useState<Theme>(board.theme)
@@ -38,7 +31,7 @@ const Board = () => {
     }
 
     setBoard(newBoard)
-    setNewBoard(newBoard)
+    updateBoard(newBoard)
   }, [title, theme])
 
   useEffect(() => {
@@ -55,14 +48,10 @@ const Board = () => {
 
   useEffect(() => {
     setBoard(boards.find(board => board.id === boardId)!)
-  }, [boardId])
+  }, [boardId, boards])
 
   return (
     <>
-      <DialogBoardTheme open={themeMenuOpen} setOpen={setThemeMenuOpen} setTheme={setTheme} />
-      <DialogBoardTitle open={titleMenuOpen} setOpen={setTitleMenuOpen} setTitle={setTitle} />
-      <DialogBoardDelete open={removeMenuOpen} setOpen={setRemoveMenuOpen} setDelete={setRemove} />
-
       <section className="w-full h-full bg-cover relative overflow-hidden">
         {/* Tema */}
         <div className="w-screen h-full absolute">
@@ -75,27 +64,17 @@ const Board = () => {
             className="w-full h-20 flex items-center justify-between p-4 bg-slate-800 bg-opacity-80 text-primary-foreground"
           >
             <h2 className="pl-4 font-medium text-2xl">{title}</h2>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div className="p-1 hover:bg-slate-400 hover:bg-opacity-40 rounded-sm cursor-pointer">
-                  <Ellipsis size={24} />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>
-                  Board
-                </DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => setTitleMenuOpen(true)} className="cursor-pointer">
-                  Rename
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setThemeMenuOpen(true)} className="cursor-pointer">
-                  Change Theme
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setRemoveMenuOpen(true)} className="cursor-pointer">
-                  <span className="text-destructive">Remove</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownMenuOptions
+              type="board"
+              setTitle={setTitle}
+              setTheme={setTheme}
+              setRemove={setRemove}
+            >
+              <div className="p-1 hover:bg-slate-400 hover:bg-opacity-40 rounded-sm cursor-pointer">
+                <Ellipsis size={24} />
+              </div>
+            </DropdownMenuOptions>
+
           </div>
 
           <Separator />
