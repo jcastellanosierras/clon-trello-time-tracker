@@ -8,6 +8,7 @@ import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import DropdownMenuOptions from "./DropdownMenuOptions";
 import { useEffect, useState } from "react";
 import { useBoardsStore } from "@/utils/boards";
+import DialogAddTask from "./DialogAddTask";
 
 type Props = {
   list: ListType;
@@ -21,9 +22,21 @@ const List = ({ list, boardName }: Props) => {
   const [todoList, todos] = useDragAndDrop<HTMLDivElement, TaskType>(
     list.tasks,
     {
-      group: boardName
+      group: boardName,
     }
   )
+  const [tasks, setTasks] = useState<TaskType[]>(list.tasks)
+
+  useEffect(() => {
+    if (list.tasks.length === tasks.length) return
+
+    setTasks(list.tasks)
+    todos.push(list.tasks[list.tasks.length-1])
+  }, [list])
+
+  useEffect(() => {
+    setTasks(todos)
+  }, [todos])
 
   useEffect(() => {
     // actualizar la lista
@@ -58,8 +71,8 @@ const List = ({ list, boardName }: Props) => {
           </BoardOptions>
         </BoardWrapper>
         <Separator />
-        <div ref={todoList} id={`list-${list.id}-tasks`} className="flex flex-col gap-2">
-          {todos.map(task => (
+        <div ref={todoList} id={`list-${list.id}-tasks`} className="w-full min-h-2 flex flex-col gap-3">
+          {tasks.map(task => (
             <Task key={task.id} task={task} />
           ))}
         </div>
@@ -70,7 +83,9 @@ const List = ({ list, boardName }: Props) => {
               <h4 className="font-medium">Añadir tarea</h4>
 
               <BoardOptions className="p-0">
-                <Plus className="w-full h-full hover:text-primary p-1" />
+                <DialogAddTask listId={list.id}>
+                  <Plus className="w-full h-full hover:text-primary p-1" />
+                </DialogAddTask>
               </BoardOptions>
             </div>
           </BoardWrapper>

@@ -1,4 +1,4 @@
-import { Board as BoardType, List as ListType } from "@/types";
+import { Board as BoardType, List as ListType, Task as TaskType } from "@/types";
 import { create } from "zustand";
 
 type BoardsStore = {
@@ -9,6 +9,7 @@ type BoardsStore = {
   addList: (boardId: string, list: ListType) => void;
   updateList: (list: ListType) => void;
   removeList: (listId: string) => void;
+  addTask: (listId: string, task: TaskType) => void;
 }
 
 const saveToLocalStorage = (boards: BoardType[]) => {
@@ -82,5 +83,26 @@ export const useBoardsStore = create<BoardsStore>((set) => ({
     saveToLocalStorage(newBoards)
 
     return { boards: newBoards }
+  }),
+  addTask: (listId, task) => set(({ boards }) => {
+    const newBoards = boards.map(board => {
+      const newLists = board.lists.map(list => {
+        if (list.id !== listId) return list
+
+        return {
+          ...list,
+          tasks: list.tasks.concat(task)
+        }
+      })
+
+      return {
+        ...board,
+        lists: newLists
+      }
+    })
+
+    saveToLocalStorage(newBoards)
+
+    return { boards: newBoards}
   })
 }))
