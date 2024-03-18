@@ -5,6 +5,9 @@ import { Separator } from "./ui/separator";
 import { Ellipsis, Plus } from 'lucide-react'
 import Task from "./Task";
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
+import DropdownMenuOptions from "./DropdownMenuOptions";
+import { useEffect, useState } from "react";
+import { useBoardsStore } from "@/utils/boards";
 
 type Props = {
   list: ListType;
@@ -12,6 +15,9 @@ type Props = {
 }
 
 const List = ({ list, boardName }: Props) => {
+  const { updateList, removeList } = useBoardsStore()
+  const [title, setTitle] = useState<string>(list.title)
+  const [remove, setRemove] = useState<boolean>(false)
   const [todoList, todos] = useDragAndDrop<HTMLDivElement, TaskType>(
     list.tasks,
     {
@@ -19,13 +25,36 @@ const List = ({ list, boardName }: Props) => {
     }
   )
 
+  useEffect(() => {
+    // actualizar la lista
+    if (!title) return
+
+    updateList({
+      ...list,
+      title
+    })
+  }, [title]) 
+
+  useEffect(() => {
+    //borrar la lista
+    if (!remove) return
+
+    removeList(list.id)
+  }, [remove])
+
   return (
     <div key={list.id} className="h-fit p-4 bg-primary rounded-lg text-primary-foreground min-w-52 shadow-sm shadow-slate-800">
       <div className="flex flex-col gap-2">
         <BoardWrapper id={`list-name-${list.id}`}>
-          <h3 className="font-semibold">{list.title}</h3>
+          <h3 className="font-semibold">{title}</h3>
           <BoardOptions className="p-0">
-            <Ellipsis className="w-full h-full hover:text-primary p-1" size={18} />
+            <DropdownMenuOptions
+              type="list"
+              setTitle={setTitle}
+              setRemove={setRemove}
+            >
+              <Ellipsis className="w-full h-full hover:text-primary p-1" size={18} />
+            </DropdownMenuOptions>
           </BoardOptions>
         </BoardWrapper>
         <Separator />
