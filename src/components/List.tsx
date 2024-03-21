@@ -19,23 +19,24 @@ const List = ({ list, boardName }: Props) => {
   const { updateList, removeList } = useBoardsStore()
   const [title, setTitle] = useState<string>(list.title)
   const [remove, setRemove] = useState<boolean>(false)
-  const [todoList, todos] = useDragAndDrop<HTMLDivElement, TaskType>(
+  const [todoList, todos, setTodos] = useDragAndDrop<HTMLDivElement, TaskType>(
     list.tasks,
     {
       group: boardName,
     }
   )
-  const [tasks, setTasks] = useState<TaskType[]>(list.tasks)
 
   useEffect(() => {
-    if (list.tasks.length === tasks.length) return
+    if (list.tasks.length === todos.length) return
 
-    setTasks(list.tasks)
-    todos.push(list.tasks[list.tasks.length-1])
+    setTodos(list.tasks)
   }, [list])
 
   useEffect(() => {
-    setTasks(todos)
+    updateList({
+      ...list,
+      tasks: todos
+    })
   }, [todos])
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const List = ({ list, boardName }: Props) => {
         </BoardWrapper>
         <Separator />
         <div ref={todoList} id={`list-${list.id}-tasks`} className="w-full min-h-2 flex flex-col gap-3">
-          {tasks.map(task => (
+          {todos.map(task => (
             <Task key={task.id} task={task} />
           ))}
         </div>
