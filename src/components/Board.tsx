@@ -1,4 +1,4 @@
-import { Theme, type Board } from "@/types"
+import { Theme, type Board, type List as ListType } from "@/types"
 import { Separator } from "./ui/separator";
 import List from "./List";
 import { Ellipsis, Plus } from 'lucide-react'
@@ -8,6 +8,7 @@ import { useBoardsStore } from "@/utils/boards";
 import { themes } from "@/consts";
 import DialogAddList from '@/components/DialogAddList'
 import DropdownMenuOptions from "./DropdownMenuOptions";
+import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 
 export type ThemeOptionType = {
   id: Theme;
@@ -22,6 +23,9 @@ const Board = () => {
   const [theme, setTheme] = useState<Theme>(board.theme)
   const [remove, setRemove] = useState<boolean>(false)
   const navigate = useNavigate()
+  const [listsParent, lists, setLists] = useDragAndDrop<HTMLDivElement, ListType>(
+    board.lists,
+  )
 
   useEffect(() => {
     const newBoard = {
@@ -35,6 +39,13 @@ const Board = () => {
   }, [title, theme])
 
   useEffect(() => {
+    updateBoard({
+      ...board,
+      lists
+    })
+  }, [lists])
+
+  useEffect(() => {
     if (!remove || !boardId) return
 
     removeBoard(boardId)
@@ -44,6 +55,7 @@ const Board = () => {
   useEffect(() => {
     setTitle(board.title)
     setTheme(board.theme)
+    setLists(board.lists)
   }, [board])
 
   useEffect(() => {
@@ -83,9 +95,14 @@ const Board = () => {
             id="board-content"
             className="flex gap-4 p-4 overflow-x-scroll h-full w-full"
           >
-            {board.lists.map(list => (
-              <List key={`list-${list.id}`} list={list} boardName={board.title} />
-            ))}
+            <div
+              ref={listsParent}
+              className="flex gap-4"
+            >
+              {lists.map(list => (
+                <List key={list.id} list={list} boardName={board.title} />
+              ))}
+            </div>
 
             <DialogAddList boardId={board.id}>
               <div
