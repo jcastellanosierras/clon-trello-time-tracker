@@ -47,13 +47,14 @@ export const useBoardsStore = create<BoardsStore>((set) => ({
     return { boards: newBoards }
   }),
   addList: (boardId, list) => set(({ boards }) => {
-    const boardIndex = boards.findIndex(board => board.id === boardId)
+    const newBoards = boards.map(board => {
+      if (board.id !== boardId) return board
 
-    if (boardIndex === -1) return { boards }
-
-    const newBoards = [...boards]
-
-    newBoards[boardIndex].lists.push(list)
+      return {
+        ...board,
+        lists: board.lists.concat(list)
+      }
+    })
 
     saveToLocalStorage(newBoards)
 
