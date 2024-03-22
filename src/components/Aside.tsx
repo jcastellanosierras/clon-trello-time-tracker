@@ -4,10 +4,10 @@ import BoardWrapper from "./BoardWrapper"
 import SetUserName from "./SetUserName"
 import { Avatar } from "./ui/avatar"
 import { Separator } from "./ui/separator"
-import { FolderKanban, Plus, Ellipsis, Pencil } from 'lucide-react'
+import { FolderKanban, Plus, Pencil } from 'lucide-react'
 import DialogAddBoard from "./DialogAddBoard"
 import { useBoardsStore } from "@/utils/boards"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 const Aside = () => {
   const { user } = useUserStore()
@@ -60,14 +60,18 @@ const Aside = () => {
 
         <div id="boards-container" className="flex flex-col py-4">
           {boards && boards.map(board => (
-            <div key={board.id} className="px-4 py-1 hover:bg-muted-foreground">
+            <div key={board.id} className="hover:bg-slate-300 hover:bg-opacity-60">
               <BoardWrapper id={`board-${board.id}`}>
-                <Link to={`/board/${board.id}`}>
+                <NavLink 
+                  className={
+                    ({ isActive }) => isActive
+                      ? "px-4 py-1 w-full h-full bg-slate-300 bg-opacity-60"
+                      : "px-4 py-1 w-full h-full"
+                  }
+                  to={`/board/${board.id}`}
+                >
                   {board.title}
-                </Link>
-                <BoardOptions>
-                  <Ellipsis size={16} />
-                </BoardOptions>
+                </NavLink>
               </BoardWrapper>
             </div>
           ))}
