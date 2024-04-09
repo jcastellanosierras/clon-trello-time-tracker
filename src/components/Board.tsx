@@ -22,6 +22,7 @@ const Board = () => {
   const [title, setTitle] = useState<string>(board.title)
   const [theme, setTheme] = useState<Theme>(board.theme)
   const [remove, setRemove] = useState<boolean>(false)
+  const [drag, setDrag] = useState<boolean>(false)
   const navigate = useNavigate()
   const [listsParent, lists, setLists] = useDragAndDrop<HTMLDivElement, ListType>(
     board.lists,
@@ -100,7 +101,7 @@ const Board = () => {
               className="flex gap-4"
             >
               {lists.map(list => (
-                <List key={list.id} list={list} boardName={board.title} />
+                <List key={list.id} dragStatus={drag} setDragStatus={setDrag} list={list} boardName={board.title} />
               ))}
             </div>
 

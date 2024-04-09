@@ -5,27 +5,64 @@ import { Separator } from "./ui/separator";
 import { Ellipsis, Plus } from 'lucide-react'
 import Task from "./Task";
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
+import { type DNDPlugin, parents, addEvents } from '@formkit/drag-and-drop'
 import DropdownMenuOptions from "./DropdownMenuOptions";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useBoardsStore } from "@/utils/boards";
 import DialogAddTask from "./DialogAddTask";
 
 type Props = {
   list: ListType;
   boardName: string;
+  dragStatus: boolean;
+  setDragStatus: Dispatch<SetStateAction<boolean>>;
 }
 
-const List = ({ list, boardName }: Props) => {
+const List = ({ list, boardName, dragStatus, setDragStatus }: Props) => {
   const { updateList, removeList } = useBoardsStore()
   const [title, setTitle] = useState<string>(list.title)
   const [remove, setRemove] = useState<boolean>(false)
+  
+  // Plugin
+  const dragStatusPlugin: DNDPlugin = (parent) => {
+    const parentData = parents.get(parent);
+    if (!parentData) return;
+  
+    function dragstart() {
+      setDragStatus(true);
+    }
+  
+    function dragend() {
+      setDragStatus(false);
+    }
+  
+    return {
+      setup() {},
+      teardown() {},
+      setupNode(data) {
+        data.nodeData.abortControllers.customPlugin = addEvents(data.node, {
+          dragstart: dragstart,
+          dragend: dragend,
+        });
+      },
+      tearDownNode(data) {
+        if (data.nodeData?.abortControllers?.customPlugin) {
+          data.nodeData.abortControllers.customPlugin.abort();
+        }
+      },
+      setupNodeRemap() {},
+      tearDownNodeRemap() {},
+    };
+  };
+
   const [todoList, todos, setTodos] = useDragAndDrop<HTMLDivElement, TaskType>(
     list.tasks,
     {
       group: boardName,
+      plugins: [dragStatusPlugin],
     }
   )
-
+  
   useEffect(() => {
     if (list.tasks.length === todos.length) return
 
@@ -33,6 +70,8 @@ const List = ({ list, boardName }: Props) => {
   }, [list])
 
   useEffect(() => {
+    if (dragStatus) return
+
     updateList({
       ...list,
       tasks: todos
@@ -42,6 +81,8 @@ const List = ({ list, boardName }: Props) => {
   useEffect(() => {
     // actualizar la lista
     if (!title) return
+
+    if (dragStatus) return
 
     updateList({
       ...list,
