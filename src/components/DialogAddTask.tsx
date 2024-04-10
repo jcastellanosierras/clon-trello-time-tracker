@@ -27,6 +27,7 @@ const DialogAddTask = ({ children, listId }: Props) => {
     addTask(listId, {
       id: crypto.randomUUID(),
       title: name,
+      time: 0
     })
   }
 

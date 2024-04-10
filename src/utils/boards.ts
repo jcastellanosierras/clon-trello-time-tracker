@@ -12,6 +12,7 @@ type BoardsStore = {
   addTask: (listId: string, task: TaskType) => void;
   updateTask: (task: TaskType) => void;
   removeTask: (taskId: string) => void;
+  trackTime: (listId: string, time: number) => void;
 }
 
 const saveToLocalStorage = (boards: BoardType[]) => {
@@ -147,5 +148,49 @@ export const useBoardsStore = create<BoardsStore>((set) => ({
     saveToLocalStorage(newBoards)
 
     return { boards: newBoards }
-  })
+  }),
+  trackTime: (listId, time) => set(({ boards }) => {
+    let boardId: string
+    const newBoards = boards.map(board => {
+      const newLists = board.lists.map(list => {
+        if (list.id !== listId) return list
+
+        boardId = board.id
+
+        const newTime = time + list.time
+
+        const newTasks = list.tasks.map(task => {
+          return {
+            ...task,
+            time: task.time + time
+          }
+        })
+
+        return {
+          ...list,
+          tasks: newTasks,
+          time: newTime
+        }
+      })
+
+      const newTime = board.time + time
+
+      if (board.id === boardId) {
+        return {
+          ...board,
+          time: newTime,
+          lists: newLists
+        }
+      }
+
+      return {
+        ...board,
+        lists: newLists
+      }
+    })
+
+    saveToLocalStorage(newBoards)
+
+    return { boards: newBoards }
+  }),
 }))

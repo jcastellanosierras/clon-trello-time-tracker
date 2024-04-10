@@ -27,7 +27,8 @@ const AddBoard = ({ children, boardId }: Props) => {
     addList(boardId, {
       id: crypto.randomUUID(),
       title: name,
-      tasks: []
+      tasks: [],
+      time: 0
     })
   }
 

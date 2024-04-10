@@ -27,7 +27,8 @@ const AddBoard = ({ children }: Props) => {
       id: crypto.randomUUID(),
       title: name,
       lists: [],
-      theme: 'tranquiluxe'
+      theme: 'tranquiluxe',
+      time: 0
     })
   }
 

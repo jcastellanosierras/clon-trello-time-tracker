@@ -9,6 +9,7 @@ import { themes } from "@/consts";
 import DialogAddList from '@/components/DialogAddList'
 import DropdownMenuOptions from "./DropdownMenuOptions";
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
+import Timer from '@/components/Timer'
 
 export type ThemeOptionType = {
   id: Theme;
@@ -77,16 +78,23 @@ const Board = () => {
             className="w-full h-20 flex items-center justify-between p-4 bg-slate-800 bg-opacity-80 text-primary-foreground"
           >
             <h2 className="pl-4 font-medium text-2xl">{title}</h2>
-            <DropdownMenuOptions
-              type="board"
-              setTitle={setTitle}
-              setTheme={setTheme}
-              setRemove={setRemove}
-            >
-              <div className="p-1 hover:bg-slate-400 hover:bg-opacity-40 rounded-sm cursor-pointer">
-                <Ellipsis size={24} />
+            <div className="flex gap-4">
+              <div className="flex items-center">
+                <Timer lists={lists} />
               </div>
-            </DropdownMenuOptions>
+              <div className="flex">
+                <DropdownMenuOptions
+                  type="board"
+                  setTitle={setTitle}
+                  setTheme={setTheme}
+                  setRemove={setRemove}
+                >
+                  <div className="flex items-center p-1 hover:bg-slate-400 hover:bg-opacity-40 rounded-sm cursor-pointer">
+                    <Ellipsis size={24} />
+                  </div>
+                </DropdownMenuOptions>
+              </div>
+            </div>
 
           </div>
 
