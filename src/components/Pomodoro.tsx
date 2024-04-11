@@ -14,9 +14,9 @@ import { useBoardsStore } from "@/utils/boards";
 
 const PomodoroOptions = {
   '25/5': {
-    work: 5,
-    rest: 2,
-    longRest: 3,
+    work: 25 * 60,
+    rest: 5 * 60,
+    longRest: 15 * 60,
     worksToLongRest: 4
   },
   '50/10': {
@@ -84,7 +84,6 @@ export default function Pomodoro() {
   }, [play])
 
   useEffect(() => {
-    console.log('hola')
     if (mode !== 'work') return
     if (!list) return
 
