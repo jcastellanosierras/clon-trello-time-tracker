@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Board from './components/Board.tsx'
+import Pomodoro from './components/Pomodoro.tsx'
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         path: '/board/:boardId',
         element: <Board />
+      },
+      {
+        path: '/pomodoro',
+        element: <Pomodoro />
       }
    ]
   }
