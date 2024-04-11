@@ -1,7 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import Header from "./components/Header"
 import Aside from "./components/Aside"
-// import { Board as BoardType, Theme } from "./types"
 import { useState } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "./lib/utils"
@@ -10,32 +9,6 @@ import SetUserName from "./components/SetUserName"
 import { Outlet } from "react-router-dom"
 
 function App() {
-  // const board: BoardType = {
-  //   id: '1',
-  //   title: 'Tablero 1',
-  //   lists: [
-  //     {
-  //       id: '1',
-  //       title: 'Lista 1',
-  //       tasks: [
-  //         { id: '1', title: 'Tarea 1' },
-  //         { id: '2', title: 'Tarea 2' },
-  //         { id: '3', title: 'Tarea 3' },
-  //       ]
-  //     },
-  //     {
-  //       id: '2',
-  //       title: 'Lista 2',
-  //       tasks: [
-  //         { id: '4', title: 'Tarea 4' },
-  //         { id: '5', title: 'Tarea 5' },
-  //         { id: '6', title: 'Tarea 6' },
-  //       ]
-  //     },
-  //   ],
-  //   theme: 'novatrix' as Theme
-  // }
-
   const { user } = useUserStore()
   const [asideOpen, setAsideOpen] = useState(true)
 
