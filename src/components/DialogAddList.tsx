@@ -19,7 +19,7 @@ type Props = {
   boardId: string;
 }
 
-const AddBoard = ({ children, boardId }: Props) => {
+const DialogAddList = ({ children, boardId }: Props) => {
   const { addList } = useBoardsStore()
   const [name, setName] = useState<string>('')
 
@@ -70,4 +70,4 @@ const AddBoard = ({ children, boardId }: Props) => {
   )
 }
 
-export default AddBoard
+export default DialogAddList

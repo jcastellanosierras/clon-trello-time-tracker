@@ -18,7 +18,7 @@ type Props = {
   children: ReactNode;
 }
 
-const AddBoard = ({ children }: Props) => {
+const DialogAddBoard = ({ children }: Props) => {
   const { addBoard } = useBoardsStore()
   const [name, setName] = useState<string>('')
 
@@ -70,4 +70,4 @@ const AddBoard = ({ children }: Props) => {
   )
 }
 
-export default AddBoard
+export default DialogAddBoard
