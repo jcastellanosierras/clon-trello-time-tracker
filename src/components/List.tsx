@@ -76,7 +76,7 @@ const List = ({ list, boardName, dragStatus, setDragStatus }: Props) => {
       ...list,
       tasks: todos
     })
-  }, [todos])
+  }, [dragStatus])
 
   useEffect(() => {
     // actualizar la lista
