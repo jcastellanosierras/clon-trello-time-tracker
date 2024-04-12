@@ -139,6 +139,7 @@ export default function Pomodoro() {
     workTimes.current = 0
     setWork(PomodoroOptions[option].work)
     setRest(PomodoroOptions[option].rest)
+    formatTime(PomodoroOptions[option].work, setDisplay)
     setMode('work')
  }, [option])
 
