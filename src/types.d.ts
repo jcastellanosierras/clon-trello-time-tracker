@@ -20,4 +20,4 @@ export type Task = Time & {
   title: string;
 }
 
-export type Theme = 'lumiflex' | 'novatrix' | 'velustro' | 'opulento' | 'tranquiluxe'
+export type Theme = 'lumiflex' | 'novatrix' | 'velustro' | 'opulento' | 'tranquiluxe' | 'none'
