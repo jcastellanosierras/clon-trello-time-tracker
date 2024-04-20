@@ -21,7 +21,13 @@ const ThemeOption = ({ themeOption, setTheme }: Props) => {
     <div
       className="w-1/2 h-36 cursor-pointer relative"
     >
-      {themeOption.component}
+      {themeOption.id === "none" ? (
+        <div className="w-full h-full flex items-center justify-center text-slate-300 font-semibold text-lg">
+          None
+        </div>
+      ) : (
+        <>{themeOption.component}</>
+      )}
       <div
         id={themeOption.id}
         onClick={handleClick}
