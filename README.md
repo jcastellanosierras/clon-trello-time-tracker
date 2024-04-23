@@ -4,4 +4,6 @@ TrelloTime Tracker es una aplicación web que combina las funcionalidades de Tre
 
 ¡Sigue todo el proceso de desarrollo de este proyecto aquí! 
 
-[![Preview](https://i.ytimg.com/vi/IHjlaV4jxXA/maxresdefault.jpg)](https://www.youtube.com/playlist?list=PLU7evwQ_gsw73XmSQRRLAtnlbVU0uE_UY)
+<a href="https://www.youtube.com/playlist?list=PLU7evwQ_gsw73XmSQRRLAtnlbVU0uE_UY" target="_blank">
+  <img src="https://i.ytimg.com/vi/IHjlaV4jxXA/maxresdefault.jpg" alt="Preview" />
+</a>
