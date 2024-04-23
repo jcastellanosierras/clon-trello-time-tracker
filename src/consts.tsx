@@ -28,5 +28,9 @@ export const themes: ThemeOptionType[] = [
   {
     id: 'tranquiluxe',
     component: <Tranquiluxe />,
+  },
+  {
+    id: 'none',
+    component: <></>,
   }
 ]
